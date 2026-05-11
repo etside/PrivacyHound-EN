@@ -1,4 +1,4 @@
-# PrivacyHound (哮天犬) 🛡️🐶
+# PrivacyHound (哮天犬) <img src="app/src/main/res/drawable/ic_xtq_mascot.jpg" width="32" height="32">
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com)
@@ -41,13 +41,13 @@
 
 ---
 
-## 📸 界面预览 | Screenshots
+## 📸 运行截图 | Screenshots
 
-| 仪表盘 (Dashboard) | 历史记录 (History) | 隐私引导 (Guide) |
-| :---: | :---: | :---: |
-| ![Dashboard Placeholder](https://via.placeholder.com/200x400?text=Dashboard) | ![History Placeholder](https://via.placeholder.com/200x400?text=History) | ![Guide Placeholder](https://via.placeholder.com/200x400?text=Guide) |
-
-*(请在发布时替换为真实截图)*
+<p align="center">
+  <img src="1.jpg" width="30%" alt="Dashboard" />
+  <img src="2.jpg" width="30%" alt="History" />
+  <img src="3.jpg" width="30%" alt="Guide" />
+</p>
 
 ---
 
