@@ -1,4 +1,4 @@
-# PrivacyHound (哮天犬) <img src="app/src/main/res/drawable/ic_xtq_mascot.jpg" width="64" height="64">
+# PrivacyHound (哮天犬) <img src="app/src/main/res/drawable/ic_xtq_mascot.jpg" width="128" height="128">
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com)
