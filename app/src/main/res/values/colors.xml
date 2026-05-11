@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="seed">#1565C0</color>
+    <color name="overlay_text">#ECEFF1</color>
+    <color name="overlay_action">#90CAF9</color>
+    <color name="overlay_muted">#B0BEC5</color>
+</resources>
