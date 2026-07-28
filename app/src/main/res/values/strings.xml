@@ -127,8 +127,8 @@
     <string name="settings_show_overlay_subtitle">Show floating alert bar over other apps</string>
     <string name="settings_section_about">About</string>
     <string name="settings_version_format">Version %1$s</string>
-    <string name="settings_about_developer">Developed by HackingGroup</string>
-    <string name="settings_about_disclaimer">Standalone app with no network access. All data stays on your device. Open-source for security auditing.</string>
+    <string name="settings_about_developer">Developed by EngineersTech</string>
+    <string name="settings_about_disclaimer">Based on PrivacyHound by HackingGroup. Upgraded and maintained by EngineersTech. No network access — all data stays on your device.</string>
 
     <!-- Stats screen -->
     <string name="stats_title">Usage Statistics</string>
