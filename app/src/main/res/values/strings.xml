@@ -1,90 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">哮天犬</string>
-    <!-- 首页等处简短说明 -->
-    <string name="app_subtitle">感知硬件访问；进阶可查其他 App 调用位置、通讯录与短信读取</string>
-    <string name="dashboard_header_tagline">感知摄像头与麦克风；进阶可查其他 App 的位置、通讯录与短信读取</string>
+    <string name="app_name">PrivacyHound</string>
+    <string name="app_subtitle">Detect hardware access; advanced mode reveals other apps\' location, contacts, and SMS access</string>
+    <string name="dashboard_header_tagline">Detect camera and microphone usage; advanced mode reveals other apps\' location, contacts, and SMS access</string>
     <string name="sensor_idle_dash">—</string>
 
-    <string name="channel_monitor_name">后台监测</string>
-    <string name="channel_monitor_desc">保持监测服务常驻通知</string>
-    <string name="channel_alert_name">隐私提醒</string>
-    <string name="channel_alert_desc">摄像头、麦克风、位置与敏感数据访问提醒</string>
+    <string name="channel_monitor_name">Background Monitoring</string>
+    <string name="channel_monitor_desc">Persistent notification for the monitoring service</string>
+    <string name="channel_alert_name">Privacy Alerts</string>
+    <string name="channel_alert_desc">Alerts for camera, microphone, location, and sensitive data access</string>
 
-    <string name="monitor_notification_title">哮天犬 · 监测运行中</string>
-    <string name="monitor_notification_text_easy">简易模式：摄像头与麦克风；通讯录/短信读取需精确模式</string>
-    <string name="monitor_notification_text_precise">精确模式：摄像头、麦克风、位置、通讯录与短信读取等</string>
-    <string name="action_stop_monitor">停止</string>
+    <string name="monitor_notification_title">PrivacyHound · Monitoring Active</string>
+    <string name="monitor_notification_text_easy">Easy mode: camera and microphone; contacts/SMS require precise mode</string>
+    <string name="monitor_notification_text_precise">Precise mode: camera, microphone, location, contacts, SMS, and more</string>
+    <string name="action_stop_monitor">Stop</string>
 
-    <string name="alert_notification_title">硬件占用提醒</string>
-    <string name="alert_notification_body">%1$s 正在使用%2$s</string>
+    <string name="alert_notification_title">Hardware Access Alert</string>
+    <string name="alert_notification_body">%1$s is using %2$s</string>
 
-    <string name="overlay_body">%1$s 正在使用%2$s</string>
-    <string name="overlay_action_detail">查看详情</string>
-    <string name="overlay_action_dismiss">忽略</string>
+    <string name="overlay_body">%1$s is using %2$s</string>
+    <string name="overlay_action_detail">View Details</string>
+    <string name="overlay_action_dismiss">Dismiss</string>
 
-    <string name="nav_dashboard">仪表盘</string>
-    <string name="nav_history">隐私报告</string>
-    <string name="nav_guide">使用说明</string>
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_history">Privacy Report</string>
+    <string name="nav_guide">User Guide</string>
 
-    <string name="hardware_camera">摄像头</string>
-    <string name="hardware_mic">麦克风</string>
-    <string name="hardware_gps">位置</string>
-    <string name="hardware_contacts_read">通讯录读取</string>
-    <string name="hardware_sms_read">短信读取</string>
-    <string name="hardware_contacts_read_short">通讯录</string>
-    <string name="hardware_sms_read_short">短信</string>
+    <string name="hardware_camera">Camera</string>
+    <string name="hardware_mic">Microphone</string>
+    <string name="hardware_gps">Location</string>
+    <string name="hardware_contacts_read">Contacts Access</string>
+    <string name="hardware_sms_read">SMS Access</string>
+    <string name="hardware_contacts_read_short">Contacts</string>
+    <string name="hardware_sms_read_short">SMS</string>
 
-    <string name="state_idle">空闲</string>
-    <string name="state_active">使用中</string>
-    <string name="state_unknown">未知</string>
+    <string name="state_idle">Idle</string>
+    <string name="state_active">Active</string>
+    <string name="state_unknown">Unknown</string>
 
-    <string name="recent_title">最近记录</string>
-    <string name="open_history">查看全部隐私报告</string>
+    <string name="recent_title">Recent Activity</string>
+    <string name="open_history">View Full Privacy Report</string>
 
-    <string name="monitoring_start">开始监测</string>
-    <string name="monitoring_stop">停止监测</string>
-    <string name="monitoring_running">监测运行中</string>
-    <string name="public_unknown_app">未知应用（摄像头）</string>
-    <string name="public_unknown_mic">未知应用（麦克风）</string>
+    <string name="monitoring_start">Start Monitoring</string>
+    <string name="monitoring_stop">Stop Monitoring</string>
+    <string name="monitoring_running">Monitoring Active</string>
+    <string name="public_unknown_app">Unknown App (Camera)</string>
+    <string name="public_unknown_mic">Unknown App (Microphone)</string>
 
-    <string name="dashboard_mode_hint">简易模式 · 详见「使用说明」</string>
-    <string name="dashboard_mode_precise_hint">精确模式 · 详见「使用说明」</string>
+    <string name="dashboard_mode_hint">Easy Mode · See User Guide for details</string>
+    <string name="dashboard_mode_precise_hint">Precise Mode · See User Guide for details</string>
 
-    <string name="guide_title">使用说明</string>
-    <string name="guide_about_section_title">关于与本软件</string>
-    <string name="guide_about_intro">本应用由 HackingGroup 出品。</string>
-    <string name="guide_about_official_sites_label">官方网站：</string>
-    <string name="guide_about_site_cn">中文 https://hackinggroup.org.cn</string>
-    <string name="guide_about_site_en">英文 https://hackinggroup.org</string>
-    <string name="guide_about_wechat_qr_label">关注我们</string>
-    <string name="guide_about_wechat_qr_cd">HackingGroup 微信公众号二维码</string>
-    <string name="guide_about_disclaimer">本软件为单机版：不上传数据、无联网功能，信息留在本机，安全可靠。请仅在合法合规前提下用于安全技术研究与学习。</string>
-    <string name="guide_section_easy_title">简易模式：无需 ADB</string>
-    <string name="guide_easy_intro">默认即可开始使用：授予悬浮窗与通知后，点击「开始监测」。</string>
-    <string name="guide_easy_step_overlay">悬浮窗：用于在屏幕顶部显示占用提醒，请在系统设置中允许「显示在其他应用上层」。</string>
-    <string name="guide_easy_step_notifications">通知：用于推送占用提醒，请在系统设置中允许本应用发送通知。</string>
-    <string name="guide_easy_step_limits">能力说明：简易模式下摄像头无法可靠识别具体是哪个 App（会显示为「未知应用」）；麦克风在 Android 10 及以上多数机型可解析包名。位置、通讯录读取、短信读取无可靠公开 API，需进阶 AppOps 授权后才能监测。</string>
-    <string name="guide_section_advanced_title">进阶（可选）：ADB 精确模式</string>
-    <string name="guide_advanced_intro">若需要通过 AppOps 精确识别摄像头、位置、通讯录读取与短信读取等行为的调用方，可使用 USB 调试或无线调试执行下列命令（仅需一次）。不需要的用户可忽略本章。</string>
-    <string name="guide_step_dev">1. 打开「开发者选项」并启用 USB 调试或无线调试</string>
-    <string name="guide_step_adb">2. 在电脑或无线调试配对终端执行下列命令（已填入本机包名）</string>
-    <string name="guide_usage_stats_hint">可选：在系统设置 → 特殊应用权限 → 使用情况访问权限 中授予本应用，以更准确地标注前台 / 后台状态。</string>
-    <string name="guide_copy">复制命令</string>
-    <string name="guide_copied">已复制</string>
+    <string name="guide_title">User Guide</string>
+    <string name="guide_about_section_title">About</string>
+    <string name="guide_about_intro">This app is developed by HackingGroup.</string>
+    <string name="guide_about_official_sites_label">Official Website:</string>
+    <string name="guide_about_site_cn">Chinese https://hackinggroup.org.cn</string>
+    <string name="guide_about_site_en">English https://hackinggroup.org</string>
+    <string name="guide_about_wechat_qr_label">Follow Us</string>
+    <string name="guide_about_wechat_qr_cd">HackingGroup WeChat QR Code</string>
+    <string name="guide_about_disclaimer">This app is fully standalone: it does not upload data or access the internet. All information stays on your device. Fully open-source — feel free to audit the code. Please use only for security research and educational purposes in compliance with local laws.</string>
+    <string name="guide_section_easy_title">Easy Mode: No ADB Required</string>
+    <string name="guide_easy_intro">Get started immediately: grant overlay and notification permissions, then tap Start Monitoring.</string>
+    <string name="guide_easy_step_overlay">Overlay: Used to display alerts at the top of the screen. Please allow \"Display over other apps\" in system settings.</string>
+    <string name="guide_easy_step_notifications">Notifications: Used to send privacy alerts. Please allow this app to send notifications in system settings.</string>
+    <string name="guide_easy_step_limits">Limitations: In easy mode, the camera cannot reliably identify which app is using it (will show as \"Unknown App\"). The microphone can resolve package names on most Android 10+ devices. Location, contacts, and SMS access require ADB authorization for precise mode.</string>
+    <string name="guide_section_advanced_title">Advanced (Optional): ADB Precise Mode</string>
+    <string name="guide_advanced_intro">To precisely identify which app is accessing camera, location, contacts, or SMS via AppOps, run the following command via USB debugging or wireless debugging (one-time setup). Skip this section if you don\'t need it.</string>
+    <string name="guide_step_dev">1. Enable Developer Options and turn on USB debugging or Wireless debugging</string>
+    <string name="guide_step_adb">2. Run the following command on your computer or wireless debugging terminal (pre-filled with this app\'s package name)</string>
+    <string name="guide_usage_stats_hint">Optional: Grant Usage Stats access in Settings → Special app permissions → Usage access for more accurate foreground/background detection.</string>
+    <string name="guide_copy">Copy Command</string>
+    <string name="guide_copied">Copied</string>
 
-    <string name="report_unknown_caller_title">未能识别的调用应用</string>
+    <string name="report_unknown_caller_title">Unidentified Caller App</string>
 
-    <string name="history_title">隐私报告</string>
-    <string name="history_search_hint">搜索应用</string>
-    <string name="filter_all">全部</string>
-    <string name="export_csv">导出 CSV</string>
-    <string name="export_json">导出 JSON</string>
-    <string name="foreground_badge">前台</string>
-    <string name="background_badge">后台</string>
+    <string name="history_title">Privacy Report</string>
+    <string name="history_search_hint">Search apps</string>
+    <string name="filter_all">All</string>
+    <string name="export_csv">Export CSV</string>
+    <string name="export_json">Export JSON</string>
+    <string name="foreground_badge">Foreground</string>
+    <string name="background_badge">Background</string>
 
-    <string name="permission_overlay">需要悬浮窗权限以显示顶部提醒</string>
-    <string name="permission_notifications">需要通知权限以发送提醒</string>
+    <string name="permission_overlay">Overlay permission is required to display alerts</string>
+    <string name="permission_notifications">Notification permission is required to send alerts</string>
 
-    <string name="duration_ongoing">进行中</string>
+    <string name="duration_ongoing">Ongoing</string>
 </resources>

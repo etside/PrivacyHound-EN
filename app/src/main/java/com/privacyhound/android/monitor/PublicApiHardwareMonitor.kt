@@ -11,9 +11,9 @@ import android.os.Process
 import java.lang.reflect.Method
 
 /**
- * 无需 root / ADB：摄像头通过 [CameraManager] 可用性；麦克风通过 [AudioManager] 录制会话。
- * 摄像头无法识别具体 App；麦克风在 Android 10+ 多数机型可通过 clientUid 解析包名。
- * 位置占用无可靠公开 API，简易模式下不监测位置（精确模式仍走 AppOps）。
+ * No root/ADB required: camera via [CameraManager] availability; microphone via [AudioManager] recording sessions.
+ * Camera cannot identify the specific app; microphone can resolve package names on most Android 10+ devices via clientUid.
+ * Location has no reliable public API; easy mode does not monitor location (precise mode uses AppOps).
  */
 class PublicApiHardwareMonitor(
     private val context: Context,
@@ -71,7 +71,7 @@ class PublicApiHardwareMonitor(
             audioManager.registerAudioRecordingCallback(audioRecordingCallback, mainHandler)
         }
 
-        // 部分机型 System 回调不及时，轮询作为补充（与回调并行，逻辑幂等）
+        // Some devices have delayed system callbacks; polling as supplement (parallel with callbacks, logically idempotent)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             mainHandler.removeCallbacks(pollMic)
             mainHandler.post(pollMic)
@@ -104,8 +104,8 @@ class PublicApiHardwareMonitor(
 
         val myUid = Process.myUid()
         val others = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // null UID：系统未暴露 clientUid 时仍提示「有录制」（未知应用），避免微信/录音机等无任何提示。
-            // 明确为本 UID 的会话排除。
+            // null UID: system didn't expose clientUid, still alert "recording detected" (unknown app) to avoid missing WeChat/voice recorder etc.
+            // Explicitly exclude sessions from our own UID.
             configs.filter { c ->
                 val uid = recordingClientUidReflect(c)
                 uid == null || uid != myUid

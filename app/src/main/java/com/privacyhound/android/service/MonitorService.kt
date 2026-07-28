@@ -34,7 +34,7 @@ class MonitorService : Service(), AppOpsMonitorListener {
     private lateinit var appOpsMonitor: AppOpsMonitor
     private var publicMonitor: PublicApiHardwareMonitor? = null
 
-    /** 是否走 AppOps 精确监听（位置、通讯录与短信读取等）；失败或未授权时为 false，仅公开 API */
+    /** Whether using AppOps precise mode (location, contacts, SMS, etc.); false on failure or unauthorized, public API only */
     private var useAppOps = false
     private val activeRows = ConcurrentHashMap<Key, Long>()
 

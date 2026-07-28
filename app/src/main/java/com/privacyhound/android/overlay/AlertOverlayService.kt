@@ -17,7 +17,7 @@ import com.privacyhound.android.R
 import com.privacyhound.android.util.dp
 
 /**
- * 顶部悬浮条提醒，约 5 秒后自动移除。
+ * Top overlay alert bar, auto-dismisses after ~5 seconds.
  */
 class AlertOverlayService : Service() {
 

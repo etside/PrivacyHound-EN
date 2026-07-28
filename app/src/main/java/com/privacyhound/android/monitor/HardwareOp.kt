@@ -2,7 +2,7 @@ package com.privacyhound.android.monitor
 
 import android.app.AppOpsManager
 
-/** 与 [com.privacyhound.android.data.PrivacyEvent.opType] 对齐 */
+/** Aligned with [com.privacyhound.android.data.PrivacyEvent.opType] */
 object HardwareOp {
     const val TYPE_CAMERA = 0
     const val TYPE_MIC = 1
@@ -10,7 +10,7 @@ object HardwareOp {
     const val TYPE_CONTACTS_READ = 3
     const val TYPE_SMS_READ = 4
 
-    /** AppOps 回调中的 op 字符串（部分机型 SDK 未暴露常量，与 AOSP 保持一致） */
+    /** AppOps callback op strings (some OEM SDKs don't expose constants; matches AOSP) */
     private const val OPSTR_READ_CONTACTS = "android:read_contacts"
     private const val OPSTR_READ_SMS = "android:read_sms"
 
@@ -51,11 +51,11 @@ object HardwareOp {
     }
 
     fun labelForType(type: Int): String = when (type) {
-        TYPE_MIC -> "麦克风"
-        TYPE_GPS -> "位置"
-        TYPE_CONTACTS_READ -> "通讯录读取"
-        TYPE_SMS_READ -> "短信读取"
-        else -> "摄像头"
+        TYPE_MIC -> "Microphone"
+        TYPE_GPS -> "Location"
+        TYPE_CONTACTS_READ -> "Contacts Access"
+        TYPE_SMS_READ -> "SMS Access"
+        else -> "Camera"
     }
 
     fun parseOpFromCallback(opStr: String?): Int? {
