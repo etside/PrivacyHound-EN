@@ -12,6 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import com.privacyhound.android.ui.screens.DashboardScreen
 import com.privacyhound.android.ui.screens.GuideScreen
 import com.privacyhound.android.ui.screens.HistoryScreen
+import com.privacyhound.android.ui.screens.SettingsScreen
+import com.privacyhound.android.ui.screens.StatsScreen
 import com.privacyhound.android.ui.theme.PrivacyHoundTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,7 +46,9 @@ class MainActivity : ComponentActivity() {
                     composable("dashboard") {
                         DashboardScreen(
                             onOpenHistory = { navController.navigate("history") },
-                            onOpenGuide = { navController.navigate("guide") }
+                            onOpenGuide = { navController.navigate("guide") },
+                            onOpenStats = { navController.navigate("stats") },
+                            onOpenSettings = { navController.navigate("settings") }
                         )
                     }
                     composable("history") {
@@ -52,6 +56,15 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("guide") {
                         GuideScreen(onBack = { navController.popBackStack() })
+                    }
+                    composable("stats") {
+                        StatsScreen(onBack = { navController.popBackStack() })
+                    }
+                    composable("settings") {
+                        SettingsScreen(
+                            onBack = { navController.popBackStack() },
+                            onOpenExport = { navController.navigate("history") }
+                        )
                     }
                 }
             }

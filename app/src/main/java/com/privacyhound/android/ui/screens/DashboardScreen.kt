@@ -7,6 +7,9 @@ import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Contacts
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Mic
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Sms
 import androidx.compose.material.icons.outlined.Videocam
@@ -54,6 +58,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -84,6 +89,8 @@ private data class SensorTileSpec(
 fun DashboardScreen(
     onOpenHistory: () -> Unit,
     onOpenGuide: () -> Unit,
+    onOpenStats: () -> Unit,
+    onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -193,7 +200,10 @@ fun DashboardScreen(
                 },
                 actions = {
                     IconButton(onClick = onOpenGuide) {
-                        Icon(Icons.Outlined.Settings, contentDescription = stringResource(R.string.nav_guide))
+                        Icon(Icons.Outlined.Info, contentDescription = stringResource(R.string.nav_guide))
+                    }
+                    IconButton(onClick = onOpenSettings) {
+                        Icon(Icons.Outlined.Settings, contentDescription = stringResource(R.string.nav_settings))
                     }
                 }
             )
@@ -274,12 +284,30 @@ fun DashboardScreen(
             }
 
             Button(
+                onClick = onOpenStats,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            ) {
+                Text(stringResource(R.string.dashboard_open_stats))
+            }
+
+            Button(
                 onClick = onOpenHistory,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 10.dp)
+                    .padding(vertical = 4.dp)
             ) {
                 Text(stringResource(R.string.open_history))
+            }
+
+            Button(
+                onClick = onOpenSettings,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            ) {
+                Text(stringResource(R.string.nav_settings))
             }
         }
     }
@@ -295,15 +323,33 @@ private fun CompactSensorTile(
     val accent = MaterialTheme.colorScheme.primary
     val muted = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f)
     val iconTint = if (active != null) accent else muted
+
+    val scale by animateFloatAsState(
+        targetValue = if (active != null) 1.05f else 1f,
+        animationSpec = spring(stiffness = Spring.StiffnessLow),
+        label = "tileScale"
+    )
+    val elevation by animateFloatAsState(
+        targetValue = if (active != null) 6f else 0f,
+        animationSpec = spring(stiffness = Spring.StiffnessLow),
+        label = "tileElevation"
+    )
+
     Surface(
-        modifier = modifier.height(86.dp),
+        modifier = modifier
+            .height(86.dp)
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+                this.shadowElevation = elevation
+            },
         shape = RoundedCornerShape(14.dp),
         color = if (active != null) {
             MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f)
         } else {
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
         },
-        tonalElevation = 0.dp
+        tonalElevation = if (active != null) 3.dp else 0.dp
     ) {
         Column(
             modifier = Modifier

@@ -71,13 +71,12 @@ class PublicApiHardwareMonitor(
             audioManager.registerAudioRecordingCallback(audioRecordingCallback, mainHandler)
         }
 
-        // Some devices have delayed system callbacks; polling as supplement (parallel with callbacks, logically idempotent)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        // Rare fallback poll only on pre-Q devices where AudioRecordingCallback may not fire reliably.
+        // On Q+ the callback is reliable — skip polling entirely to save battery.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             mainHandler.removeCallbacks(pollMic)
             mainHandler.post(pollMic)
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            // Initial check for pre-Q
             applyMicConfigs(audioManager.activeRecordingConfigurations ?: emptyList())
         }
     }
@@ -154,7 +153,8 @@ class PublicApiHardwareMonitor(
     }
 
     companion object {
-        private const val POLL_MS = 900L
+        /** Fallback poll interval — 30s instead of 900ms; callbacks are the primary mechanism */
+        private const val POLL_MS = 30_000L
 
         @Volatile
         private var clientUidMethod: Method? = null

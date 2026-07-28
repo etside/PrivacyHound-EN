@@ -78,4 +78,53 @@ class PrivacyRepository(private val dao: PrivacyEventDao) {
         val needs = s.contains(',') || s.contains('"') || s.contains('\n')
         return if (!needs) s else '"' + s.replace("\"", "\"\"") + '"'
     }
+
+    // ── Stats / analytics ──────────────────────────────────────────
+
+    fun observeUsageByApp(): Flow<List<AppUsageCount>> = dao.observeUsageByApp()
+
+    fun observeDailyStats(): Flow<List<DailyCount>> {
+        val sevenDaysAgo = System.currentTimeMillis() - 7L * 24 * 60 * 60 * 1000
+        val sinceEpoch = sevenDaysAgo / (24 * 60 * 60 * 1000)
+        return dao.observeDailyStats(sinceEpoch)
+    }
+
+    fun observeMostActiveApp(): Flow<MostActiveApp?> = dao.observeMostActiveApp()
+
+    suspend fun deleteAll(): Unit = dao.deleteAll()
+
+    /** Delete events older than [retentionDays] days. Returns the number of rows deleted. */
+    suspend fun cleanupOldData(retentionDays: Int = 30): Int = withContext(Dispatchers.IO) {
+        val cutoff = System.currentTimeMillis() - retentionDays.toLong() * 24 * 60 * 60 * 1000
+        dao.deleteEventsBefore(cutoff)
+    }
+
+    /** Lightweight aggregate summary used by the Stats screen. */
+    suspend fun getUsageSummary(): UsageSummary = withContext(Dispatchers.IO) {
+        val all = dao.getAllSnapshot()
+        val now = System.currentTimeMillis()
+        val todayStart = now - (now % (24 * 60 * 60 * 1000))
+        val yesterdayStart = todayStart - 24L * 60 * 60 * 1000
+
+        val todayCount = all.count { it.startTime >= todayStart }
+        val yesterdayCount = all.count { it.startTime in yesterdayStart until todayStart }
+
+        val bySensor = all.groupBy { it.opType }.mapValues { it.value.size }
+
+        UsageSummary(
+            totalEvents = all.size,
+            todayCount = todayCount,
+            yesterdayCount = yesterdayCount,
+            bySensor = bySensor
+        )
+    }
 }
+
+/** Pre-computed stats snapshot returned by [PrivacyRepository.getUsageSummary]. */
+data class UsageSummary(
+    val totalEvents: Int,
+    val todayCount: Int,
+    val yesterdayCount: Int,
+    /** opType -> count */
+    val bySensor: Map<Int, Int>
+)

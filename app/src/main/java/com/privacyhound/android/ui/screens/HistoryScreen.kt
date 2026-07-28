@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.MoreVert
@@ -24,9 +26,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -45,6 +49,11 @@ import com.privacyhound.android.XiaotianquanApp
 import com.privacyhound.android.data.PrivacyEvent
 import com.privacyhound.android.monitor.HardwareOp
 import com.privacyhound.android.monitor.shouldShowCallerPackageInReports
+import com.privacyhound.android.ui.theme.CameraBlue
+import com.privacyhound.android.ui.theme.ContactsPurple
+import com.privacyhound.android.ui.theme.LocationOrange
+import com.privacyhound.android.ui.theme.MicGreen
+import com.privacyhound.android.ui.theme.SmsTeal
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -202,15 +211,23 @@ private fun HistoryRow(event: PrivacyEvent) {
         HardwareOp.TYPE_SMS_READ -> stringResource(R.string.hardware_sms_read_short)
         else -> stringResource(R.string.hardware_camera)
     }
+    val chipColor = when (event.opType) {
+        HardwareOp.TYPE_CAMERA -> CameraBlue
+        HardwareOp.TYPE_MIC -> MicGreen
+        HardwareOp.TYPE_GPS -> LocationOrange
+        HardwareOp.TYPE_CONTACTS_READ -> ContactsPurple
+        HardwareOp.TYPE_SMS_READ -> SmsTeal
+        else -> MaterialTheme.colorScheme.primary
+    }
     val rangeText = remember(event.startTime, event.endTime, ongoing) {
         val start = fmt.format(Date(event.startTime))
         val end = event.endTime?.let { fmt.format(Date(it)) } ?: ongoing
         "$start → $end"
     }
     val detailLine = if (shouldShowCallerPackageInReports(event.packageName, selfPkg)) {
-        "${event.packageName} · $hw"
+        "${event.packageName}"
     } else {
-        hw
+        null
     }
     val titleLine = if (event.packageName == selfPkg) {
         stringResource(R.string.report_unknown_caller_title)
@@ -220,17 +237,51 @@ private fun HistoryRow(event: PrivacyEvent) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(titleLine, style = MaterialTheme.typography.titleMedium)
-            Text(detailLine, style = MaterialTheme.typography.bodyMedium)
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                Surface(
+                    shape = RoundedCornerShape(6.dp),
+                    color = chipColor.copy(alpha = 0.15f)
+                ) {
+                    Text(
+                        hw,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = chipColor
+                    )
+                }
+                if (event.isForeground) {
+                    Surface(
+                        shape = RoundedCornerShape(6.dp),
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                    ) {
+                        Text(
+                            stringResource(R.string.foreground_badge),
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                } else {
+                    Surface(
+                        shape = RoundedCornerShape(6.dp),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+                    ) {
+                        Text(
+                            stringResource(R.string.background_badge),
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        )
+                    }
+                }
+            }
+            if (detailLine != null) {
+                Text(detailLine, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+            }
             Text(
                 rangeText,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-            )
-            Text(
-                if (event.isForeground) stringResource(R.string.foreground_badge)
-                else stringResource(R.string.background_badge),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary
             )
         }
     }

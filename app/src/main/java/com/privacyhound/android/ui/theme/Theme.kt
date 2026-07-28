@@ -1,11 +1,23 @@
 package com.privacyhound.android.ui.theme
 
+import android.app.Activity
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
+import com.privacyhound.android.util.PrefsManager
 
 private val LightColors = lightColorScheme(
     primary = Color(0xFF1565C0),
@@ -27,9 +39,35 @@ private val DarkColors = darkColorScheme(
 
 @Composable
 fun PrivacyHoundTheme(content: @Composable () -> Unit) {
-    val dark = isSystemInDarkTheme()
+    val context = LocalContext.current
+    val prefs = remember { PrefsManager.getInstance(context) }
+    val darkModePref by prefs.darkModeFlow.collectAsState()
+
+    val systemDark = isSystemInDarkTheme()
+    val dark = when (darkModePref) {
+        "dark" -> true
+        "light" -> false
+        else -> systemDark
+    }
+
+    val colorScheme = when {
+        // Dynamic Color on Android 12+
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        }
+        dark -> DarkColors
+        else -> LightColors
+    }
+
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        val window = (view.context as Activity).window
+        window.statusBarColor = colorScheme.background.toArgb()
+        WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !dark
+    }
+
     MaterialTheme(
-        colorScheme = if (dark) DarkColors else LightColors,
+        colorScheme = colorScheme,
         typography = Typography,
         content = content
     )
