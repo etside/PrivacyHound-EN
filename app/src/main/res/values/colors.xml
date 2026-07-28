@@ -8,4 +8,7 @@
     <color name="surface_card">#1E1E1E</color>
     <color name="text_white">#FFFFFF</color>
     <color name="text_muted">#8B8B8B</color>
+    <color name="overlay_text">#FFFFFF</color>
+    <color name="overlay_action">#D4AF37</color>
+    <color name="overlay_muted">#8B8B8B</color>
 </resources>
