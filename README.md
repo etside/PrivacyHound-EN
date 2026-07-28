@@ -1,9 +1,9 @@
-# PrivacyHound <img src="app/src/main/res/drawable/ic_xtq_mascot.jpg" width="128" height="128">
+# eT_Saftey_Manager_Premium <img src="app/src/main/res/drawable/ic_xtq_mascot.jpg" width="128" height="128">
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com)
 
-**PrivacyHound** is a privacy monitoring tool designed for Android users, developed by **HackingGroup**. Just like its namesake (the legendary hound), it keeps a sharp eye on your device, capturing and recording sensitive permission usage by various apps in real-time.
+**eT_Saftey_Manager_Premium** is a privacy monitoring tool designed for Android users, developed by **HackingGroup**. Just like its namesake (the legendary hound), it keeps a sharp eye on your device, capturing and recording sensitive permission usage by various apps in real-time.
 
 ---
 
@@ -54,7 +54,7 @@
 - Android 8.0 (API 26)+
 
 ### Build & Run
-1. Clone the repository: `git clone https://github.com/your-username/PrivacyHound.git`
+1. Clone the repository: `git clone https://github.com/etside/PrivacyHound-EN.git`
 2. Open the project in Android Studio.
 3. Wait for Gradle sync to complete.
 4. Connect an Android device and click **Run**.
@@ -63,7 +63,7 @@
 
 ## Privacy
 
-**Standalone Security**: PrivacyHound is a **standalone application** with no network access permissions. It **does not** upload any of your personal data. All monitoring logs are stored locally on your device in a Room database. This software is fully open-source, and you are welcome to audit the source code.
+**Standalone Security**: eT_Saftey_Manager_Premium is a **standalone application** with no network access permissions. It **does not** upload any of your personal data. All monitoring logs are stored locally on your device in a Room database. This software is fully open-source, and you are welcome to audit the source code.
 
 ---
 

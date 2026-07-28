@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PrivacyHound</string>
+    <string name="app_name">eT_Saftey_Manager_Premium</string>
     <string name="app_subtitle">Detect hardware access; advanced mode reveals other apps\' location, contacts, and SMS access</string>
     <string name="dashboard_header_tagline">Detect camera and microphone usage; advanced mode reveals other apps\' location, contacts, and SMS access</string>
     <string name="sensor_idle_dash">—</string>
 
-    <string name="channel_monitor_name">Background Monitoring</string>
+    <string name="channel_monitor_name">eT_Saftey_Manager_Premium · Monitoring</string>
     <string name="channel_monitor_desc">Persistent notification for the monitoring service</string>
     <string name="channel_alert_name">Privacy Alerts</string>
     <string name="channel_alert_desc">Alerts for camera, microphone, location, and sensitive data access</string>
 
-    <string name="monitor_notification_title">PrivacyHound · Monitoring Active</string>
+    <string name="monitor_notification_title">eT_Saftey_Manager_Premium · Monitoring Active</string>
     <string name="monitor_notification_text_easy">Easy mode: camera and microphone; contacts/SMS require precise mode</string>
     <string name="monitor_notification_text_precise">Precise mode: camera, microphone, location, contacts, SMS, and more</string>
     <string name="action_stop_monitor">Stop</string>
