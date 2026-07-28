@@ -11,6 +11,8 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +36,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Sms
 import androidx.compose.material.icons.outlined.Videocam
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.outlined.WorkspacePremium
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,9 +46,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -57,12 +59,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -71,6 +76,19 @@ import com.privacyhound.android.XiaotianquanApp
 import com.privacyhound.android.data.PrivacyEvent
 import com.privacyhound.android.monitor.HardwareOp
 import com.privacyhound.android.service.MonitorService
+import com.privacyhound.android.ui.components.GoldDivider
+import com.privacyhound.android.ui.components.PremiumButton
+import com.privacyhound.android.ui.components.PremiumCard
+import com.privacyhound.android.ui.theme.GoldDark
+import com.privacyhound.android.ui.theme.GoldLight
+import com.privacyhound.android.ui.theme.GoldPrimary
+import com.privacyhound.android.ui.theme.GoldSubtle
+import com.privacyhound.android.ui.theme.PitchBlack
+import com.privacyhound.android.ui.theme.SurfaceCard
+import com.privacyhound.android.ui.theme.TextAmber
+import com.privacyhound.android.ui.theme.TextMuted
+import com.privacyhound.android.ui.theme.TextWhite
+import com.privacyhound.android.util.LicenseManager
 import com.privacyhound.android.util.PermissionUtils
 import com.privacyhound.android.util.ServiceRunning
 import kotlinx.coroutines.launch
@@ -91,6 +109,7 @@ fun DashboardScreen(
     onOpenGuide: () -> Unit,
     onOpenStats: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenPremium: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -106,6 +125,9 @@ fun DashboardScreen(
     var running by remember {
         mutableStateOf(ServiceRunning.isRunning(context, MonitorService::class.java))
     }
+
+    val isPremium = LicenseManager.isActive(context)
+    val premiumTier = LicenseManager.getTier(context)
 
     LaunchedEffect(Unit) {
         running = ServiceRunning.isRunning(context, MonitorService::class.java)
@@ -192,23 +214,45 @@ fun DashboardScreen(
                                 .clip(RoundedCornerShape(12.dp)),
                             contentScale = ContentScale.Crop
                         )
-                        Text(
-                            text = stringResource(R.string.app_name),
-                            style = MaterialTheme.typography.titleLarge
-                        )
+                        Column {
+                            Text(
+                                text = stringResource(R.string.app_name),
+                                style = MaterialTheme.typography.titleLarge,
+                                color = TextWhite
+                            )
+                            if (isPremium) {
+                                Text(
+                                    text = premiumTier.uppercase(),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = GoldPrimary,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
                     }
                 },
                 actions = {
+                    IconButton(onClick = onOpenPremium) {
+                        Icon(
+                            Icons.Outlined.WorkspacePremium,
+                            contentDescription = "Premium",
+                            tint = if (isPremium) GoldPrimary else GoldSubtle
+                        )
+                    }
                     IconButton(onClick = onOpenGuide) {
-                        Icon(Icons.Outlined.Info, contentDescription = stringResource(R.string.nav_guide))
+                        Icon(Icons.Outlined.Info, contentDescription = stringResource(R.string.nav_guide), tint = TextMuted)
                     }
                     IconButton(onClick = onOpenSettings) {
-                        Icon(Icons.Outlined.Settings, contentDescription = stringResource(R.string.nav_settings))
+                        Icon(Icons.Outlined.Settings, contentDescription = stringResource(R.string.nav_settings), tint = TextMuted)
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = PitchBlack
+                )
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        containerColor = PitchBlack
     ) { padding ->
         Column(
             modifier = Modifier
@@ -216,10 +260,46 @@ fun DashboardScreen(
                 .padding(horizontal = 16.dp)
                 .fillMaxSize()
         ) {
+            // Premium Banner (if not activated)
+            if (!isPremium) {
+                PremiumCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "Unlock Premium",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = GoldPrimary,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "Get location, SMS, contacts & more",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = TextMuted
+                            )
+                        }
+                        PremiumButton(
+                            text = "Activate",
+                            onClick = onOpenPremium,
+                            modifier = Modifier.width(100.dp)
+                        )
+                    }
+                }
+            }
+
             Text(
                 text = stringResource(R.string.dashboard_header_tagline),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.68f),
+                color = TextMuted,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(bottom = 10.dp)
@@ -246,32 +326,32 @@ fun DashboardScreen(
                     stringResource(R.string.dashboard_mode_hint)
                 },
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.62f),
+                color = TextMuted,
                 modifier = Modifier.padding(top = 10.dp, bottom = 8.dp)
             )
 
-            Button(
-                onClick = { toggleMonitoring() },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    if (running) stringResource(R.string.monitoring_stop)
-                    else stringResource(R.string.monitoring_start)
-                )
-            }
+            PremiumButton(
+                text = if (running) stringResource(R.string.monitoring_stop)
+                else stringResource(R.string.monitoring_start),
+                onClick = { toggleMonitoring() }
+            )
 
             if (running) {
                 Text(
                     stringResource(R.string.monitoring_running),
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = GoldPrimary,
                     modifier = Modifier.padding(top = 6.dp)
                 )
             }
 
             Spacer(Modifier.height(14.dp))
 
-            Text(stringResource(R.string.recent_title), style = MaterialTheme.typography.titleMedium)
+            Text(
+                stringResource(R.string.recent_title),
+                style = MaterialTheme.typography.titleMedium,
+                color = TextWhite
+            )
             Spacer(Modifier.height(6.dp))
 
             LazyColumn(
@@ -283,32 +363,15 @@ fun DashboardScreen(
                 }
             }
 
-            Button(
-                onClick = onOpenStats,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            ) {
-                Text(stringResource(R.string.dashboard_open_stats))
-            }
-
-            Button(
-                onClick = onOpenHistory,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            ) {
-                Text(stringResource(R.string.open_history))
-            }
-
-            Button(
-                onClick = onOpenSettings,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            ) {
-                Text(stringResource(R.string.nav_settings))
-            }
+            PremiumButton(
+                text = stringResource(R.string.dashboard_open_stats),
+                onClick = onOpenStats
+            )
+            Spacer(Modifier.height(6.dp))
+            PremiumButton(
+                text = stringResource(R.string.open_history),
+                onClick = onOpenHistory
+            )
         }
     }
 }
@@ -320,36 +383,41 @@ private fun CompactSensorTile(
     active: PrivacyEvent?,
     modifier: Modifier = Modifier
 ) {
-    val accent = MaterialTheme.colorScheme.primary
-    val muted = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f)
-    val iconTint = if (active != null) accent else muted
+    val iconTint = if (active != null) GoldPrimary else GoldSubtle
 
     val scale by animateFloatAsState(
-        targetValue = if (active != null) 1.05f else 1f,
+        targetValue = if (active != null) 1.08f else 1f,
         animationSpec = spring(stiffness = Spring.StiffnessLow),
         label = "tileScale"
     )
-    val elevation by animateFloatAsState(
-        targetValue = if (active != null) 6f else 0f,
-        animationSpec = spring(stiffness = Spring.StiffnessLow),
-        label = "tileElevation"
-    )
 
-    Surface(
+    Box(
         modifier = modifier
             .height(86.dp)
             .graphicsLayer {
                 scaleX = scale
                 scaleY = scale
-                this.shadowElevation = elevation
-            },
-        shape = RoundedCornerShape(14.dp),
-        color = if (active != null) {
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f)
-        } else {
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
-        },
-        tonalElevation = if (active != null) 3.dp else 0.dp
+            }
+            .clip(RoundedCornerShape(14.dp))
+            .background(SurfaceCard)
+            .then(
+                if (active != null) {
+                    Modifier.border(
+                        width = 1.dp,
+                        brush = Brush.linearGradient(
+                            colors = listOf(GoldDark.copy(alpha = 0.5f), GoldPrimary.copy(alpha = 0.8f), GoldLight.copy(alpha = 0.5f))
+                        ),
+                        shape = RoundedCornerShape(14.dp)
+                    )
+                } else {
+                    Modifier.border(
+                        width = 1.dp,
+                        color = GoldSubtle.copy(alpha = 0.15f),
+                        shape = RoundedCornerShape(14.dp)
+                    )
+                }
+            ),
+        contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier
@@ -364,19 +432,16 @@ private fun CompactSensorTile(
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelSmall,
+                color = TextMuted,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = if (active == null) {
-                    stringResource(R.string.sensor_idle_dash)
-                } else {
-                    active.appName
-                },
+                text = if (active == null) "—" else active.appName,
                 style = MaterialTheme.typography.labelSmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = if (active != null) accent else muted
+                color = if (active != null) GoldPrimary else GoldSubtle
             )
         }
     }
@@ -392,7 +457,10 @@ private fun RecentRow(event: PrivacyEvent) {
         HardwareOp.TYPE_SMS_READ -> stringResource(R.string.hardware_sms_read_short)
         else -> stringResource(R.string.hardware_camera)
     }
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f))) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = SurfaceCard),
+        shape = RoundedCornerShape(12.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -401,17 +469,16 @@ private fun RecentRow(event: PrivacyEvent) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(event.appName, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(hw, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                Text(event.appName, style = MaterialTheme.typography.titleSmall, color = TextWhite, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(hw, style = MaterialTheme.typography.labelMedium, color = GoldPrimary)
             }
             Column(horizontalAlignment = Alignment.End) {
-                Text(fmt.format(Date(event.startTime)), style = MaterialTheme.typography.labelSmall)
+                Text(fmt.format(Date(event.startTime)), style = MaterialTheme.typography.labelSmall, color = TextMuted)
                 val end = event.endTime
                 Text(
-                    if (end == null) stringResource(R.string.duration_ongoing)
-                    else fmt.format(Date(end)),
+                    if (end == null) "Ongoing" else fmt.format(Date(end)),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = TextMuted
                 )
             }
         }

@@ -14,6 +14,7 @@ import com.privacyhound.android.ui.screens.GuideScreen
 import com.privacyhound.android.ui.screens.HistoryScreen
 import com.privacyhound.android.ui.screens.SettingsScreen
 import com.privacyhound.android.ui.screens.StatsScreen
+import com.privacyhound.android.ui.screens.PremiumScreen
 import com.privacyhound.android.ui.theme.PrivacyHoundTheme
 
 class MainActivity : ComponentActivity() {
@@ -48,7 +49,8 @@ class MainActivity : ComponentActivity() {
                             onOpenHistory = { navController.navigate("history") },
                             onOpenGuide = { navController.navigate("guide") },
                             onOpenStats = { navController.navigate("stats") },
-                            onOpenSettings = { navController.navigate("settings") }
+                            onOpenSettings = { navController.navigate("settings") },
+                            onOpenPremium = { navController.navigate("premium") }
                         )
                     }
                     composable("history") {
@@ -64,6 +66,12 @@ class MainActivity : ComponentActivity() {
                         SettingsScreen(
                             onBack = { navController.popBackStack() },
                             onOpenExport = { navController.navigate("history") }
+                        )
+                    }
+                    composable("premium") {
+                        PremiumScreen(
+                            onBack = { navController.popBackStack() },
+                            onActivated = { navController.popBackStack() }
                         )
                     }
                 }

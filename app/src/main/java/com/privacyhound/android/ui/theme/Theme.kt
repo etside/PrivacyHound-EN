@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -19,22 +20,41 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.privacyhound.android.util.PrefsManager
 
-private val LightColors = lightColorScheme(
-    primary = Color(0xFF1565C0),
-    onPrimary = Color.White,
-    secondary = Color(0xFF00838F),
-    background = Color(0xFFF7F9FC),
-    surface = Color.White,
-    onSurface = Color(0xFF1B1B1F)
+private val PremiumDarkColors = darkColorScheme(
+    primary = GoldPrimary,
+    onPrimary = PitchBlack,
+    primaryContainer = GoldDark,
+    onPrimaryContainer = TextWhite,
+    secondary = GoldMid,
+    onSecondary = PitchBlack,
+    secondaryContainer = SurfaceCard,
+    onSecondaryContainer = TextWhite,
+    background = PitchBlack,
+    onBackground = TextWhite,
+    surface = Charcoal,
+    onSurface = TextWhite,
+    surfaceVariant = SurfaceDark,
+    onSurfaceVariant = TextMuted,
+    error = AlertRed,
+    onError = TextWhite,
+    outline = GoldSubtle,
+    outlineVariant = SurfaceElevated
 )
 
-private val DarkColors = darkColorScheme(
-    primary = Color(0xFF90CAF9),
-    onPrimary = Color(0xFF0D2F63),
-    secondary = Color(0xFF4DD0E1),
-    background = Color(0xFF101418),
-    surface = Color(0xFF1A2027),
-    onSurface = Color(0xFFE6EAF0)
+private val PremiumLightColors = lightColorScheme(
+    primary = GoldDark,
+    onPrimary = TextWhite,
+    primaryContainer = Color(0xFFFFF8E1),
+    onPrimaryContainer = PitchBlack,
+    secondary = GoldMid,
+    onSecondary = PitchBlack,
+    background = Color(0xFFFAFAFA),
+    onBackground = PitchBlack,
+    surface = TextWhite,
+    onSurface = PitchBlack,
+    surfaceVariant = Color(0xFFF5F5F5),
+    onSurfaceVariant = Color(0xFF666666),
+    outline = GoldMuted
 )
 
 @Composable
@@ -51,23 +71,28 @@ fun PrivacyHoundTheme(content: @Composable () -> Unit) {
     }
 
     val colorScheme = when {
-        // Dynamic Color on Android 12+
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        dark -> DarkColors
-        else -> LightColors
+        dark -> PremiumDarkColors
+        else -> PremiumLightColors
     }
 
     val view = LocalView.current
     if (!view.isInEditMode) {
-        val window = (view.context as Activity).window
-        window.statusBarColor = colorScheme.background.toArgb()
-        WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !dark
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = PitchBlack.toArgb()
+            window.navigationBarColor = PitchBlack.toArgb()
+            WindowCompat.getInsetsController(window, view).apply {
+                isAppearanceLightStatusBars = false
+                isAppearanceLightNavigationBars = false
+            }
+        }
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = if (dark) PremiumDarkColors else colorScheme,
         typography = Typography,
         content = content
     )
