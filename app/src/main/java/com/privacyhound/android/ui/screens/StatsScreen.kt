@@ -70,8 +70,6 @@ private val SensorColors = mapOf(
     HardwareOp.TYPE_SMS_READ to Color(0xFF8E24AA)
 )
 
-private fun sensorLabel(type: Int, res: @Composable () -> String): String = res()
-
 private fun sensorLabelFromType(type: Int): String = when (type) {
     HardwareOp.TYPE_CAMERA -> "Camera"
     HardwareOp.TYPE_MIC -> "Mic"
@@ -466,17 +464,23 @@ private fun WeeklyTrendCard(dailyStats: List<DailyCount>) {
                     cornerRadius = androidx.compose.ui.geometry.CornerRadius(4.dp.toPx(), 4.dp.toPx())
                 )
 
-                // Label below bar
-                drawContext.canvas.nativeCanvas.apply {
-                    val paint = android.graphics.Paint().apply {
-                        textSize = 10.sp.toPx()
-                        color = android.graphics.Color.GRAY
-                        textAlign = android.graphics.Paint.Align.CENTER
-                        isAntiAlias = true
-                    }
-                    val labelX = x + barWidth / 2
-                    drawText(dayLabels[idx], labelX, size.height, paint)
-                }
+            }
+        }
+
+        // Day labels below chart
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 4.dp)
+        ) {
+            dayLabels.forEach { label ->
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center
+                )
             }
         }
 
