@@ -155,10 +155,15 @@ class MonitorService : Service(), AppOpsMonitorListener {
     }
 
     private fun maybeAlert(appLabel: String, type: Int, packageName: String) {
+        val prefs = com.privacyhound.android.util.PrefsManager.getInstance(this)
         val hw = hardwareLabelRes(type)
         val nid = (packageName.hashCode() xor type) and 0x7fff_ffff
-        NotificationHelper.showHardwareAlert(this, appLabel, hw, nid)
-        AlertOverlayService.show(this, appLabel, hw, packageName)
+        if (prefs.notificationsEnabled) {
+            NotificationHelper.showHardwareAlert(this, appLabel, hw, nid)
+        }
+        if (prefs.showOverlayOnAlert && prefs.overlayEnabled) {
+            AlertOverlayService.show(this, appLabel, hw, packageName)
+        }
     }
 
     private fun hardwareLabelRes(type: Int): String = when (type) {

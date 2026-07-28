@@ -62,6 +62,9 @@ fun SettingsScreen(
     var monitoringEnabled by remember { mutableStateOf(prefs.monitoringEnabled) }
     var overlayEnabled by remember { mutableStateOf(prefs.overlayEnabled) }
     var notificationsEnabled by remember { mutableStateOf(prefs.notificationsEnabled) }
+    var vibrateOnAlert by remember { mutableStateOf(prefs.vibrateOnAlert) }
+    var soundOnAlert by remember { mutableStateOf(prefs.soundOnAlert) }
+    var showOverlayOnAlert by remember { mutableStateOf(prefs.showOverlayOnAlert) }
     var pollingIntervalMs by remember { mutableFloatStateOf(prefs.pollingIntervalMs.toFloat()) }
     var dataRetentionDays by remember { mutableFloatStateOf(prefs.dataRetentionDays.toFloat()) }
     val darkMode by prefs.darkModeFlow.collectAsState()
@@ -143,6 +146,39 @@ fun SettingsScreen(
                 }
             )
 
+            // ── Alert Behavior Section ───────────────────────────
+            SettingsSectionHeader(stringResource(R.string.settings_section_alerts))
+
+            SettingsToggle(
+                title = stringResource(R.string.settings_vibrate_on_alert),
+                subtitle = stringResource(R.string.settings_vibrate_on_alert_subtitle),
+                checked = vibrateOnAlert,
+                onCheckedChange = {
+                    vibrateOnAlert = it
+                    prefs.vibrateOnAlert = it
+                }
+            )
+
+            SettingsToggle(
+                title = stringResource(R.string.settings_sound_on_alert),
+                subtitle = stringResource(R.string.settings_sound_on_alert_subtitle),
+                checked = soundOnAlert,
+                onCheckedChange = {
+                    soundOnAlert = it
+                    prefs.soundOnAlert = it
+                }
+            )
+
+            SettingsToggle(
+                title = stringResource(R.string.settings_show_overlay),
+                subtitle = stringResource(R.string.settings_show_overlay_subtitle),
+                checked = showOverlayOnAlert,
+                onCheckedChange = {
+                    showOverlayOnAlert = it
+                    prefs.showOverlayOnAlert = it
+                }
+            )
+
             // ── Notifications Section ────────────────────────────
             SettingsSectionHeader(stringResource(R.string.settings_section_notifications))
 
@@ -215,6 +251,40 @@ fun SettingsScreen(
                     prefs.darkMode = darkModeOptions[index]
                 }
             )
+
+            // ── About Section ────────────────────────────────────
+            SettingsSectionHeader(stringResource(R.string.settings_section_about))
+
+            val versionName = try {
+                context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "1.0"
+            } catch (_: Exception) { "1.0" }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = stringResource(R.string.settings_version_format, versionName),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+                Text(
+                    text = stringResource(R.string.settings_about_developer),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+                Text(
+                    text = stringResource(R.string.settings_about_disclaimer),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                )
+            }
 
             Spacer(Modifier.height(16.dp))
         }
